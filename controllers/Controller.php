@@ -1,10 +1,9 @@
 <?php
 
-namespace App\controllers;
+namespace Controllers;
 
 class Controller
 {
-    // Bu yerda umumiy funksiyalarni yozishingiz mumkin.
     public function render($view, $data = [])
     {
         extract($data);

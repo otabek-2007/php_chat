@@ -1,5 +1,5 @@
 <?php
 return [
-    'news' => 'news/index',
+    'home' => 'home/index',
     'products' => 'product/list',
 ];

@@ -7,7 +7,15 @@ error_reporting(E_ALL);
 
 
 define('ROOT', dirname(__FILE__));
-require_once(ROOT . '/app/components/Router.php');
+require_once(ROOT . '/components/Router.php');
 
 $router = new Router();
 $router->run();
+
+spl_autoload_register(function ($class) {
+    $path = ROOT . '/' . str_replace('\\', '/', $class) . '.php';
+    if (file_exists($path)) {
+        require_once $path;
+    }
+});
+
