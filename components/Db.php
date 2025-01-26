@@ -2,7 +2,7 @@
 class Db {
     public static function getConnection() {
         $host = '127.0.0.1';
-        $dbname = 'php-chat';
+        $dbname = 'php_chat';
         $user = 'root';
         $password = '';
         $port = '3307';
