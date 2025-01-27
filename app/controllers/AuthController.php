@@ -30,7 +30,7 @@ class AuthController
 
             if ($result === true) {
                 // Ro'yxatdan o'tish muvaffaqiyatli bo'lsa
-                header('Location: /login');
+                header('Location: /home');
                 exit();
             } else {
                 // Xato bo'lsa
@@ -38,7 +38,7 @@ class AuthController
             }
         } else {
             // Ro'yxatdan o'tish sahifasini ko'rsatish
-            include 'views/register.php';
+            include 'views/auth/register.php';
         }
     }
 
@@ -63,7 +63,7 @@ class AuthController
             }
         } else {
             // Login sahifasini ko'rsatish
-            include 'views/login.php';
+            include 'views/auth/login.php';
         }
     }
 

@@ -1,6 +1,8 @@
 <?php
-class Db {
-    public static function getConnection() {
+class Db
+{
+    public static function getConnection()
+    {
         $host = '127.0.0.1';
         $dbname = 'php_chat';
         $user = 'root';

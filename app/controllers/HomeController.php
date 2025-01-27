@@ -4,5 +4,8 @@ namespace App\Controllers;
 
 class HomeController extends Controller
 {
-    public function actionIndex() {}
+    public function index()
+    {
+        include 'views/chat/index.php';
+    }
 }

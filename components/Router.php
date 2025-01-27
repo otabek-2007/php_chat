@@ -32,16 +32,17 @@ class Router
                 $controllerName = ucfirst($controllerName);
 
                 // Controller namespace'ini to'g'ri sozlash
-                $controllerName = 'App\\Controllers\\' . $controllerName;
+                $controllerNamespace = 'App\\Controllers\\' . $controllerName;
 
-                // Action nomini olish
-                $actionName = 'action' . ucfirst(array_shift($segments));
+                // Metod nomini olish
+                $actionName = array_shift($segments);
 
-                // Parametrlarni olish
+                // Agar kerak bo'lsa, "action" prefiksini olib tashlang
                 $parameters = $segments;
 
+
                 // Controller faylini tekshirish
-                $controllerFile = ROOT . '/app/controllers/' . str_replace('\\', '/', $controllerName) . '.php';
+                $controllerFile = ROOT . '/app/controllers/' . $controllerName . '.php';
 
                 if (file_exists($controllerFile)) {
                     include_once($controllerFile);
@@ -52,13 +53,14 @@ class Router
                 }
 
                 // PDO ulanishini yaratish (yoki mavjud bo'lsa, uni controllerga uzatish)
-                $pdo = new \PDO('mysql:host=localhost;dbname=php_chat', 'root', '', [
+                $pdo = new \PDO('mysql:host=localhost;port=3307;dbname=php_chat', 'root', '', [
                     \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
                     \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC
                 ]);
 
+
                 // Controllerni yaratish va PDO ni uzatish
-                $controllerObject = new $controllerName($pdo);
+                $controllerObject = new $controllerNamespace($pdo);
 
                 // Controller metodini chaqirish
                 $result = call_user_func_array([$controllerObject, $actionName], $parameters);
