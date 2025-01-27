@@ -5,9 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
+    <link rel="stylesheet" href="/public/css/style.css">
 </head>
 
 <body>
+    <?php include_once('./views/layouts/header.php') ?>
     <h2>Register</h2>
     <form action="/register" method="POST">
         <label for="username">Username:</label>

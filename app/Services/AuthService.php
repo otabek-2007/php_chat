@@ -7,7 +7,7 @@ use App\Models\User;
 class AuthService
 {
     protected $userModel;
-    
+
     public function __construct($pdo)
     {
         // PDO ni User modeliga uzatish
@@ -29,11 +29,16 @@ class AuthService
         }
 
         // Foydalanuvchini yaratish
-        $this->userModel->create($username, $email, $password);
+        $user=  $this->userModel->create($username, $email, $password);
+        session_start(); // Sessiyani boshlash
+        $_SESSION['user_id'] = $user['id']; // Foydalanuvchi ID sini sessiyaga saqlash
+        $_SESSION['username'] = $user['username']; // Foydalanuvchi nomini sessiyaga saqlash
+        $_SESSION['is_logged_in'] = true; // Tizimga kirganligini belgilash
 
         return true;
     }
 
+    // Foydalanuvchi tizimga kirishi
     // Foydalanuvchi tizimga kirishi
     public function login($username, $password)
     {
@@ -49,9 +54,10 @@ class AuthService
         }
 
         // Foydalanuvchini tizimga kiritish
-        session_start();
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['username'] = $user['username'];
+        session_start(); // Sessiyani boshlash
+        $_SESSION['user_id'] = $user['id']; // Foydalanuvchi ID sini sessiyaga saqlash
+        $_SESSION['username'] = $user['username']; // Foydalanuvchi nomini sessiyaga saqlash
+        $_SESSION['is_logged_in'] = true; // Tizimga kirganligini belgilash
 
         return true;
     }
