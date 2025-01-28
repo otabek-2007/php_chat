@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../config/db_params.php';
 
-class CreateChatTableMigration
+class CreateMessageTableMigration
 {
     public static function up()
     {
@@ -16,17 +16,18 @@ class CreateChatTableMigration
             );
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            $sql = "CREATE TABLE IF NOT EXISTS chat (
+            $sql = "CREATE TABLE IF NOT EXISTS messages (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id INT NOT NULL,
+                from_user_id INT NOT NULL,
+                to_user_id INT NOT NULL,
                 message TEXT NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )";
 
             $pdo->exec($sql);
-            echo "Chat jadvali muvaffaqiyatli yaratildi!\n";
+            echo "Xabarlar jadvali muvaffaqiyatli yaratildi!\n";
         } catch (PDOException $e) {
-            echo "Chat jadvalini yaratishda xato: " . $e->getMessage() . "\n";
+            echo "Xabarlar jadvalini yaratishda xato: " . $e->getMessage() . "\n";
         }
     }
 
@@ -42,12 +43,12 @@ class CreateChatTableMigration
             );
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            $sql = "DROP TABLE IF EXISTS chat";
+            $sql = "DROP TABLE IF EXISTS messages";
 
             $pdo->exec($sql);
-            echo "Chat jadvali muvaffaqiyatli o'chirildi!\n";
+            echo "Xabarlar jadvali muvaffaqiyatli o'chirildi!\n";
         } catch (PDOException $e) {
-            echo "Chat jadvalini o'chirishda xato: " . $e->getMessage() . "\n";
+            echo "Xabarlar jadvalini o'chirishda xato: " . $e->getMessage() . "\n";
         }
     }
 }

@@ -1,20 +1,13 @@
-/* O'zgaruvchilar */
+/* Variables */
 $primary-color: #007bff;
 $secondary-color: #fc0;
-$dark-bg: #121212;
+$dark-bg: #343131;
 $light-bg: #f9f9f9;
 $dark-header-bg: #333;
 $light-text-color: #333;
 $dark-text-color: #fff;
 
-/* Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/* Body */
+/* Global Styles */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -27,39 +20,35 @@ body {
     &.dark-mode {
         background-color: $dark-bg;
         color: $dark-text-color;
+    }
+}
 
-        .main-header {
-            background-color: $dark-header-bg;
-        }
+/* Header */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: $light-bg;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s;
 
-        .main-header .logo {
-            color: $secondary-color;
-        }
+    &.dark-mode {
+        background-color: $dark-header-bg;
+    }
 
-        .main-header .menu li a {
+    .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: $primary-color;
+    }
+
+    .theme-switcher {
+        cursor: pointer;
+        font-size: 1.25rem;
+        color: $light-text-color;
+
+        &.dark-mode {
             color: $dark-text-color;
-        }
-
-        .main-header .theme-switcher {
-            color: $secondary-color;
-        }
-
-        form {
-            background-color: $dark-header-bg;
-            color: $dark-text-color;
-
-            input {
-                background: #333;
-                color: $dark-text-color;
-                border: 1px solid #555;
-            }
-
-            button {
-                background: #444;
-                &:hover {
-                    background: #666;
-                }
-            }
         }
     }
 }
@@ -69,173 +58,143 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 1rem;
-    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Header */
-.main-header {
+/* Chat Box */
+.chat-box {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #fff;
-    width: 100%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 0.5rem 1rem;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    transition: background-color 0.3s;
+    gap: 1rem;
 
-    /* Logo */
-    .logo {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin: 0;
-        color: $light-text-color;
-        text-decoration: none;
-        flex: 0 1 auto; /* Logo elementi uchun to'g'ri joylashuv */
-    }
+    .search-container {
+        flex: 1;
+        background: $light-bg;
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition:
+            background-color 0.3s,
+            color 0.3s;
 
-    /* Menu */
-    .menu {
-        list-style: none;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-end; /* Menu elementlarini o'ngga joylashtiradi */
-        align-items: center;
-        gap: 1rem;
-        margin: 0;
-        flex: 1; /* Menu elementlari o'rtada kengayadi */
+        &.dark-mode {
+            background: $dark-header-bg;
+        }
 
-        li {
-            margin: 0;
+        h3 {
+            margin-bottom: 1rem;
+            color: inherit;
+        }
 
-            a {
-                text-decoration: none;
-                color: $light-text-color;
-                font-size: 1rem;
-                transition: color 0.3s;
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            transition:
+                background-color 0.3s,
+                color 0.3s;
 
-                &:hover {
-                    color: $primary-color;
-                }
+            &.dark-mode {
+                background: $dark-header-bg;
+                color: $dark-text-color;
+                border-color: #444;
             }
         }
 
-        /* Theme Switcher */
-        .theme-switcher {
+        .user-item {
+            padding: 0.5rem;
+            border-bottom: 1px solid #ddd;
             cursor: pointer;
-            font-size: 1.25rem;
-            color: $light-text-color;
-            transition: color 0.3s;
+            transition:
+                background-color 0.3s,
+                color 0.3s;
 
             &:hover {
-                color: $primary-color;
+                background: $primary-color;
+                color: $dark-text-color;
+            }
+
+            &.dark-mode {
+                border-color: #444;
             }
         }
     }
 
-    /* Hamburger */
-    .hamburger {
-        display: none;
-        cursor: pointer;
-        font-size: 2rem;
-    }
+    .chat-area {
+        flex: 2;
+        background: $light-bg;
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s;
 
-    /* Foydalanuvchi tizimga kirgan bo'lsa, register va loginni yashirish */
-    .menu-login-register {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
-        margin-left: auto; /* Menu to'g'ri joylashishi uchun */
+        &.dark-mode {
+            background: $dark-header-bg;
+        }
 
-        li {
-            margin: 0;
-            a {
-                color: $light-text-color;
-                font-size: 1rem;
-                transition: color 0.3s;
+        h3 {
+            margin-bottom: 1rem;
+            color: inherit;
+        }
+
+        .chat-window {
+            height: 400px;
+            overflow-y: auto;
+            background: $light-bg;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+
+            &.dark-mode {
+                background: $dark-bg;
+            }
+
+            .sent-message {
+                margin: 0.5rem 0;
+                padding: 0.75rem;
+                background: $primary-color;
+                color: $dark-text-color;
+                border-radius: 8px;
+                align-self: flex-end;
+                max-width: 70%;
+            }
+        }
+
+        form {
+            display: flex;
+            margin-top: 1rem;
+
+            input {
+                flex: 1;
+                padding: 0.75rem;
+                border-radius: 5px;
+                border: 1px solid #ddd;
+                transition:
+                    background-color 0.3s,
+                    color 0.3s;
+
+                &.dark-mode {
+                    background: $dark-header-bg;
+                    color: $dark-text-color;
+                    border-color: #444;
+                }
+            }
+
+            button {
+                padding: 0.75rem 1rem;
+                background: $primary-color;
+                color: $dark-text-color;
+                border: none;
+                border-radius: 5px;
+                margin-left: 1rem;
+                transition: background-color 0.3s;
+
                 &:hover {
-                    color: $primary-color;
+                    background: darken($primary-color, 10%);
                 }
             }
         }
-    }
-}
-
-/* Form Styling */
-form {
-    background: #fff;
-    max-width: 400px;
-    margin: 2rem auto;
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
-    label {
-        display: block;
-        font-weight: bold;
-        margin-bottom: 0.5rem;
-    }
-
-    input {
-        width: 100%;
-        padding: 0.75rem;
-        margin-bottom: 1rem;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 1rem;
-    }
-
-    button {
-        width: 100%;
-        background: $primary-color;
-        color: #fff;
-        padding: 0.75rem;
-        border: none;
-        border-radius: 5px;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: background-color 0.3s;
-
-        &:hover {
-            background: darken($primary-color, 10%);
-        }
-    }
-}
-
-/* Responsiveness */
-@media (max-width: 600px) {
-    .main-header {
-        padding: 1rem;
-    }
-
-    /* Make the menu hidden by default */
-    .main-header .menu {
-        display: none; /* Initially hide the menu on small screens */
-        flex-direction: column;
-        width: 100%;
-        background-color: #fff;
-        position: absolute;
-        top: 60px; /* Adjust to below the header */
-        right: 0;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Show hamburger menu */
-    .hamburger {
-        display: block;
-        color: $light-text-color;
-    }
-
-    .hamburger i {
-        font-size: 2rem;
-        color: $light-text-color;
-    }
-
-    /* Toggle the menu visibility */
-    .menu.active {
-        display: flex; /* Show the menu when active */
     }
 }

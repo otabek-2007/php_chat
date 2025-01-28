@@ -6,15 +6,15 @@ use App\Models\User;
 
 class AuthService
 {
+    protected $pdo;
     protected $userModel;
 
     public function __construct($pdo)
     {
-        // PDO ni User modeliga uzatish
+        $this->pdo = $pdo;
         $this->userModel = new User($pdo);
     }
 
-    // Foydalanuvchi ro'yxatdan o'tishi
     public function register($username, $email, $password, $confirmPassword)
     {
         // Parollarni tasdiqlash
@@ -28,17 +28,23 @@ class AuthService
             return "Bunday foydalanuvchi nomi mavjud!";
         }
 
-        // Foydalanuvchini yaratish
-        $user=  $this->userModel->create($username, $email, $password);
-        session_start(); // Sessiyani boshlash
-        $_SESSION['user_id'] = $user['id']; // Foydalanuvchi ID sini sessiyaga saqlash
-        $_SESSION['username'] = $user['username']; // Foydalanuvchi nomini sessiyaga saqlash
-        $_SESSION['is_logged_in'] = true; // Tizimga kirganligini belgilash
+        // Foydalanuvchini yaratish va ID olish
+        $userId = $this->userModel->create($username, $email, $password);
 
-        return true;
+        // Foydalanuvchi yaratildi, sessiyaga ID saqlash
+        session_start(); // Sessiyani ishga tushirish
+        $_SESSION['user_id'] = $userId; // Yaratilgan foydalanuvchining ID sini sessiyaga saqlash
+        $_SESSION['is_logged_in'] = true; // Foydalanuvchi tizimga kirganligini belgilash
+
+        return true; // Ro'yxatdan o'tish muvaffaqiyatli
     }
 
-    // Foydalanuvchi tizimga kirishi
+
+    public function searchUsers($query)
+    {
+        // Use the User model to search users
+        return $this->userModel->search($query);
+    }
     // Foydalanuvchi tizimga kirishi
     public function login($username, $password)
     {
@@ -55,8 +61,7 @@ class AuthService
 
         // Foydalanuvchini tizimga kiritish
         session_start(); // Sessiyani boshlash
-        $_SESSION['user_id'] = $user['id']; // Foydalanuvchi ID sini sessiyaga saqlash
-        $_SESSION['username'] = $user['username']; // Foydalanuvchi nomini sessiyaga saqlash
+        $_SESSION['user'] = $user; // Foydalanuvchi ID sini sessiyaga saqlash
         $_SESSION['is_logged_in'] = true; // Tizimga kirganligini belgilash
 
         return true;

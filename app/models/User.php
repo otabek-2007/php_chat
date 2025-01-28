@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Services\AuthService;
+use PDO;
 
 class User
 {
@@ -23,8 +24,24 @@ class User
         $stmt = $this->pdo->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
         $stmt->execute([$username, $email, $hashedPassword]);
 
-        return true;
+        // Foydalanuvchi ID sini qaytarish
+        return $this->pdo->lastInsertId();
     }
+
+
+    public function search($query)
+    {
+        $sql = "SELECT * FROM users WHERE name LIKE :query";
+        $stmt = $this->pdo->prepare($sql);
+
+        // Bind the parameter to the query with wildcard for 'like' search
+        $stmt->bindValue(':query', '%' . $query . '%');
+        $stmt->execute();
+
+        // Fetch all matching users
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 
     // Foydalanuvchi nomi bilan ma'lumotlarni olish
     public function findByUsername($username)

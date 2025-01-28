@@ -4,20 +4,24 @@ namespace App\Controllers;
 
 use App\Models\User;
 use App\Services\AuthService;
+use GuzzleHttp\Psr7\Request;
 
 class AuthController
 {
     protected $authService;
+    private $pdo;
 
     public function __construct($pdo)
     {
         // AuthService ni in'ektsiya qilamiz
         $this->authService = new AuthService($pdo);
+        $this->pdo = $pdo;
     }
 
     // Foydalanuvchi ro'yxatdan o'tishi
     public function register()
     {
+        // Foydalanuvchi ro'yxatdan o'tayotganligini tekshirish
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Formdan ma'lumotlarni olish
             $username = $_POST['username'];
@@ -33,7 +37,7 @@ class AuthController
                 header('Location: /home');
                 exit();
             } else {
-                // Xato bo'lsa
+                // Xatoliklar bo'lsa, ularni ekranga chiqarish
                 echo $result;
             }
         } else {
@@ -41,6 +45,7 @@ class AuthController
             include 'views/auth/register.php';
         }
     }
+
 
     // Foydalanuvchi tizimga kirishi
     public function login()
@@ -66,6 +71,29 @@ class AuthController
             include 'views/auth/login.php';
         }
     }
+
+    public function search($query)
+    {
+        // Agar query bo'lsa
+        if ($query) {
+            $pdo = $this->pdo;
+            $query = "%" . $query . "%";  // Sanitize query
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE username LIKE :query");
+            $stmt->execute(['query' => $query]);
+
+            $users = $stmt->fetchAll();
+
+            // Agar foydalanuvchilar mavjud bo'lsa, natijalarni qaytarish
+            if ($users) {
+                echo json_encode($users);
+            } else {
+                echo json_encode(['error' => 'No users found']);
+            }
+        } else {
+            echo json_encode(['error' => 'No search query provided']);
+        }
+    }
+
 
     // Foydalanuvchi tizimdan chiqishi
     public function logout()

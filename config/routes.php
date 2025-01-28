@@ -1,18 +1,10 @@
 <?php
 
 return [
-    // Bosh sahifa
-    'home' => 'home/index',
-
-    // Mahsulotlar ro'yxati
-    'products' => 'product/list',
-
-    // Foydalanuvchi ro'yxatdan o'tishi uchun yo'nalish
-    'register' => 'auth/register',
-
-    // Foydalanuvchi tizimga kirishi uchun yo'nalish
-    'login' => 'auth/login',
-
-    // Foydalanuvchi tizimdan chiqishi uchun yo'nalish
-    'logout' => 'auth/logout',
+    'home' => 'home/index', // Bosh sahifa
+    'login' => 'auth/login', // Login sahifasi
+    'register' => 'auth/register', // Ro'yxatdan o'tish sahifasi
+    'logout' => 'auth/logout', // Chiqish
+    'search-users' => 'auth/search', // Foydalanuvchi qidiruvi
+    'send-message/([0-9]+)/([0-9]+)/(.+)' => 'message/sendMessage/$1/$2/$3',
 ];
