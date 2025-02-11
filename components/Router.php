@@ -14,7 +14,6 @@ class Router
     private function getURI()
     {
         $uri = $_SERVER['REQUEST_URI'];
-        // Remove query parameters from URI
         $uri = explode('?', $uri)[0];
         return trim($uri, '/');
     }
@@ -25,7 +24,6 @@ class Router
     
         foreach ($this->routes as $uriPattern => $path) {
             if (preg_match("~$uriPattern~", $uri)) {
-                // Ensure $path is a string
                 if (is_callable($path)) {
                     echo "Error: Route '$uriPattern' has a callable path, which is not supported in this context.";
                     exit;
@@ -49,14 +47,14 @@ class Router
                     exit;
                 }
     
-                $pdo = new \PDO('mysql:host=localhost;port=3307;dbname=php_chat', 'root', '', [
+                $pdo = new \PDO('pgsql:host=localhost;port=5432;dbname=php_chat', 'root', 'secret', [
                     \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
                     \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC
                 ]);
+                
     
                 $controllerObject = new $controllerNamespace($pdo);
     
-                // Merge query parameters with route parameters
                 if (!empty($_GET)) {
                     $parameters = array_merge($parameters, $_GET);
                 }

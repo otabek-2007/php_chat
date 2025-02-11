@@ -10,18 +10,35 @@ class CreateUsersTableMigration
             $pdo = Db::getConnection();
 
             $sql = "CREATE TABLE IF NOT EXISTS users (
-                id INT AUTO_INCREMENT PRIMARY KEY,
+                id SERIAL PRIMARY KEY,
                 username VARCHAR(255) NOT NULL,
                 email VARCHAR(255) UNIQUE NOT NULL,
                 password VARCHAR(255) NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )";
 
             $pdo->exec($sql);
-            echo "Users table created successfully.\n";
+
+            // `updated_at` ustunini avtomatik yangilanishi uchun trigger qo'shish
+            $triggerSql = "CREATE OR REPLACE FUNCTION update_updated_at_column()
+                RETURNS TRIGGER AS $$
+                BEGIN
+                    NEW.updated_at = CURRENT_TIMESTAMP;
+                    RETURN NEW;
+                END;
+                $$ LANGUAGE plpgsql;
+
+                CREATE TRIGGER update_users_updated_at
+                BEFORE UPDATE ON users
+                FOR EACH ROW
+                EXECUTE FUNCTION update_updated_at_column();";
+
+            $pdo->exec($triggerSql);
+
+            echo "Users jadvali muvaffaqiyatli yaratildi.\n";
         } catch (PDOException $e) {
-            echo "Error creating table: " . $e->getMessage() . "\n";
+            echo "Users jadvalini yaratishda xato: " . $e->getMessage() . "\n";
         }
     }
 
@@ -30,12 +47,16 @@ class CreateUsersTableMigration
         try {
             $pdo = Db::getConnection();
 
-            $sql = "DROP TABLE IF EXISTS users";
+            // Triggerni o'chirish
+            $pdo->exec("DROP TRIGGER IF EXISTS update_users_updated_at ON users");
+            $pdo->exec("DROP FUNCTION IF EXISTS update_updated_at_column");
 
-            $pdo->exec($sql);
-            echo "Users table dropped successfully.\n";
+            // Jadvalni o'chirish
+            $pdo->exec("DROP TABLE IF EXISTS users");
+
+            echo "Users jadvali muvaffaqiyatli o'chirildi.\n";
         } catch (PDOException $e) {
-            echo "Error dropping table: " . $e->getMessage() . "\n";
+            echo "Users jadvalini o'chirishda xato: " . $e->getMessage() . "\n";
         }
     }
 }

@@ -3,13 +3,13 @@ class Db
 {
     public static function getConnection()
     {
-        $host = '127.0.0.1';
-        $dbname = 'php_chat';
-        $user = 'root';
-        $password = '';
-        $port = '3307';
+        $host = '192.168.97.3'; 
+        $dbname = 'php_chat'; 
+        $user = 'root';    
+        $password = 'secret';       
+        $port = '5432';      
 
-        $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8";
+        $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
 
         try {
             $db = new PDO($dsn, $user, $password);

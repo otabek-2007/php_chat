@@ -1,27 +1,24 @@
 <?php
 
-require_once __DIR__ . '/../config/db_params.php';
+require_once __DIR__ . '/../components/Db.php';
 
 class CreateMessageTableMigration
 {
     public static function up()
     {
-        $config = require __DIR__ . '/../config/db_params.php';
-
         try {
-            $pdo = new PDO(
-                "mysql:host={$config['host']};dbname={$config['dbname']};port={$config['port']}",
-                $config['username'],
-                $config['password']
-            );
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            // Db.php dan ulanishni oling
+            $pdo = Db::getConnection();
 
             $sql = "CREATE TABLE IF NOT EXISTS messages (
-                id INT AUTO_INCREMENT PRIMARY KEY,
+                id SERIAL PRIMARY KEY,
                 from_user_id INT NOT NULL,
                 to_user_id INT NOT NULL,
                 message TEXT NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (from_user_id) REFERENCES users(id) ON DELETE CASCADE,
+                FOREIGN KEY (to_user_id) REFERENCES users(id) ON DELETE CASCADE
             )";
 
             $pdo->exec($sql);
@@ -33,15 +30,9 @@ class CreateMessageTableMigration
 
     public static function down()
     {
-        $config = require __DIR__ . '/../config/db_params.php';
-
         try {
-            $pdo = new PDO(
-                "mysql:host={$config['host']};dbname={$config['dbname']};port={$config['port']}",
-                $config['username'],
-                $config['password']
-            );
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            // Db.php dan ulanishni oling
+            $pdo = Db::getConnection();
 
             $sql = "DROP TABLE IF EXISTS messages";
 
