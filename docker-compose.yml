@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres-container
+    environment:
+      POSTGRES_USER: yourusername
+      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_DB: yourdatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - webnet
+
+  php:
+    image: php:8.1-apache
+    container_name: php-chat
+    volumes:
+      - ./path/to/your/php/project:/var/www/html
+    ports:
+      - "80:80"
+    networks:
+      - webnet
+
+volumes:
+  postgres-data:
+
+networks:
+  webnet:
+    driver: bridge
