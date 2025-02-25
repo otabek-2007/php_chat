@@ -1,33 +1,33 @@
-version: '3.8'
-
 services:
-  postgres:
-    image: postgres:latest
-    container_name: postgres-container
-    environment:
-      POSTGRES_USER: yourusername
-      POSTGRES_PASSWORD: yourpassword
-      POSTGRES_DB: yourdatabase
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    networks:
-      - webnet
-
-  php:
-    image: php:8.1-apache
-    container_name: php-chat
-    volumes:
-      - ./path/to/your/php/project:/var/www/html
-    ports:
-      - "80:80"
-    networks:
-      - webnet
-
+    nginx:
+        image: nginx:stable-alpine
+        restart: unless-stopped
+        ports:
+            - '8090:80'
+        volumes:
+            - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+            - ./:/var/www/chat
+        depends_on:
+            - db
+    app:
+        ports:
+            - '9999:9000'
+            - '6001:6001'
+        restart: unless-stopped
+        build:
+            context: docker/php
+            dockerfile: Dockerfile
+        depends_on:
+            - db
+        volumes:
+            - ./:/var/www/chat
+    db:
+        image: postgres:latest
+        ports:
+            - '5462:5432'
+        env_file:
+            - docker/pgsql/pgsql.env
+        volumes:
+            - db_data:/var/lib/postgresql@14/data:rw
 volumes:
-  postgres-data:
-
-networks:
-  webnet:
-    driver: bridge
+    db_data:
